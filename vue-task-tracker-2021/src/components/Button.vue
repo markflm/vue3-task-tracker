@@ -1,6 +1,6 @@
 <template>
   <button
-    @click="onBtnClick(btnText)"
+    @click="onBtnClick()"
     v-bind:style="{ background: btnColor }"
     class="btn"
   >
@@ -17,8 +17,8 @@ export default {
     btnColor: String,
   },
   methods: {
-    onBtnClick(btnText) {
-      console.log(`button ${btnText} has been clicked`);
+    onBtnClick() {
+      this.$emit("toggle-add-btn");
     },
   },
 };

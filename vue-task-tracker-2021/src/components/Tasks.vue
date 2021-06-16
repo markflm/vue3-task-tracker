@@ -2,7 +2,7 @@
   <div>
     <!-- div above to bypass "v-for not allowed in template root element" warning from linter -->
     <div :key="member.id" v-for="member in tasks">
-      <Task @delete-task="$emit('delete-task', task.id)" :task="member" />
+      <Task @delete-task="$emit('delete-task', member)" :task="member" />
     </div>
   </div>
 </template>
@@ -17,5 +17,6 @@ export default {
   components: {
     Task,
   },
+  emits: ["delete-task"],
 };
 </script>

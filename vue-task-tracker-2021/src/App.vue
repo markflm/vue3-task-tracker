@@ -1,23 +1,47 @@
 <template>
   <div class="container">
-    <Header title="Task Tracker" />
-    <Tasks v-bind:tasks="tasks" />
+    <Header
+      @toggle-add-btn="toggleAddBtn"
+      title="Task Tracker"
+      :showAddTaskBtn="showAddTask"
+    />
+    <div v-if="showAddTask">
+      <AddTask @add-task="addTask" />
+    </div>
+
+    <Tasks @delete-task="deleteTask" v-bind:tasks="tasks" />
   </div>
 </template>
 
 <script>
 import Header from "./components/Header";
 import Tasks from "./components/Tasks";
+import AddTask from "./components/AddTask";
 export default {
   name: "App", //register components here
   components: {
     Header,
     Tasks,
+    AddTask,
   },
   data() {
     return {
       tasks: [],
+      showAddTask: false,
     };
+  },
+  methods: {
+    addTask(task) {
+      console.log(task);
+      this.tasks = [...this.tasks, task];
+    },
+    deleteTask(task) {
+      if (confirm(`Delete Task: ${task.text}?`))
+        this.tasks = this.tasks.filter((x) => x.id !== task.id);
+    },
+    toggleAddBtn() {
+      this.showAddTask = !this.showAddTask;
+    },
   },
   created() {
     //created is a lifecycle method; similar to ngOnInit

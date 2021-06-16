@@ -2,12 +2,12 @@
   <div class="task">
     <div class="task-title">
       <i
-        @click="toggleReminder(task)"
+        @dblclick="toggleReminder(task)"
         class="fas fa-flag"
         :class="[task.reminder ? 'reminder' : 'notReminder']"
       ></i>
       <h2>{{ task.text }}</h2>
-      <i @click="onDelete(task.id)" class="fas fa-times"></i>
+      <i @click="onDelete(task)" class="fas fa-times"></i>
     </div>
     <p>{{ task.dateTime }}</p>
   </div>
@@ -30,6 +30,7 @@ export default {
       );
     },
     onDelete(id) {
+      console.log(id);
       this.$emit("delete-task", id); //emitting 'custom event' to parent components
     },
   },
