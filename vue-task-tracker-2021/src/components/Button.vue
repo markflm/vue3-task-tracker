@@ -18,7 +18,7 @@ export default {
   },
   methods: {
     onBtnClick() {
-      this.$emit("toggle-add-btn");
+      this.$emit("btn-click");
     },
   },
 };

@@ -8,19 +8,21 @@
     <div v-if="showAddTask">
       <AddTask @add-task="addTask" />
     </div>
-
     <Tasks @delete-task="deleteTask" v-bind:tasks="tasks" />
+    <Footer />
   </div>
 </template>
 
 <script>
 import Header from "./components/Header";
+import Footer from "./components/Footer";
 import Tasks from "./components/Tasks";
 import AddTask from "./components/AddTask";
 export default {
   name: "App", //register components here
   components: {
     Header,
+    Footer,
     Tasks,
     AddTask,
   },
@@ -31,34 +33,49 @@ export default {
     };
   },
   methods: {
-    addTask(task) {
-      console.log(task);
-      this.tasks = [...this.tasks, task];
+    async addTask(task) {
+      const resq = await fetch("api/tasks", {
+        method: "POST",
+        headers: { "Content-type": "application/json" },
+        body: JSON.stringify(task),
+      });
+
+      var data = await resq.json();
+      this.tasks = [...this.tasks, data];
     },
-    deleteTask(task) {
-      if (confirm(`Delete Task: ${task.text}?`))
-        this.tasks = this.tasks.filter((x) => x.id !== task.id);
+    async deleteTask(task) {
+      if (confirm(`Delete Task: ${task.text}?`)) {
+        const resq = await fetch(`api/tasks/${task.id}`, {
+          method: "DELETE",
+        });
+
+        resq.status === 200
+          ? (this.tasks = this.tasks.filter((x) => x.id !== task.id))
+          : alert(`Error deleting task ${task.text}`);
+      }
     },
     toggleAddBtn() {
       this.showAddTask = !this.showAddTask;
     },
+    async getTasks() {
+      //populate list on load
+      const response = await fetch("api/tasks");
+
+      const data = await response.json();
+
+      return data;
+    },
+    async getTask(id) {
+      const response = await fetch(`api/tasks/${id}`);
+
+      const data = await response.json();
+
+      return data;
+    },
   },
-  created() {
+  async created() {
     //created is a lifecycle method; similar to ngOnInit
-    this.tasks = [
-      {
-        id: 1,
-        text: "learn vue",
-        dateTime: "March 19th at 1:00PM",
-        reminder: true,
-      },
-      {
-        id: 2,
-        text: "create app with vue",
-        dateTime: "March 21st at 5:00PM",
-        reminder: true,
-      },
-    ];
+    this.tasks = await this.getTasks();
   },
 };
 </script>

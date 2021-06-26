@@ -2,7 +2,7 @@
   <div class="task">
     <div class="task-title">
       <i
-        @dblclick="toggleReminder(task)"
+        @click="toggleReminder(task)"
         class="fas fa-flag"
         :class="[task.reminder ? 'reminder' : 'notReminder']"
       ></i>
@@ -21,13 +21,15 @@ export default {
     task: Object, //datatype of prop
   },
   methods: {
-    toggleReminder(task) {
-      console.log(task.reminder);
+    async toggleReminder(task) {
       task.reminder = !task.reminder;
-      console.log(task.reminder);
-      console.log(
-        `initial state of reminder flag ${this.reminderInitialState}`
-      );
+      await fetch(`api/tasks/${task.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify(task),
+      });
     },
     onDelete(id) {
       console.log(id);

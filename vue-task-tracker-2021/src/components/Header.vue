@@ -2,7 +2,7 @@
   <header>
     <h1>{{ title }}</h1>
     <Button
-      @toggle-add-btn="$emit('toggle-add-btn')"
+      @btn-click="$emit('toggle-add-btn')"
       :btnText="showAddTaskBtn ? 'Close' : 'Add Task'"
       :btnColor="showAddTaskBtn ? 'Red' : 'Blue'"
     />
