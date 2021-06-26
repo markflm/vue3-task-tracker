@@ -1,6 +1,6 @@
 <template>
-  <footer>
-    <a href="/info">Info</a>
+  <footer v-show="home">
+    <router-link to="/info">Info</router-link>
   </footer>
 </template>
 
@@ -15,3 +15,16 @@ footer {
   text-align: center;
 }
 </style>
+
+<script>
+export default {
+  computed: {
+    home() {
+      if (this.$route.path == "/") {
+        return true;
+      }
+      return false;
+    },
+  },
+};
+</script>
